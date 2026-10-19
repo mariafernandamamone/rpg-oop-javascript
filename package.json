@@ -1,0 +1,12 @@
+{
+  "name": "rpg-oop-javascript",
+  "version": "1.0.0",
+  "description": "RPG basado en turnos desarrollado en JavaScript aplicando conceptos de Programación Orientada a Objetos (OOP).",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "María Fernanda Mamone",
+  "license": "ISC"
+}
