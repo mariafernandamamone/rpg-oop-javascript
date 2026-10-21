@@ -1,6 +1,7 @@
 import { Creature } from "./entities/Creature.js";
 import { Monster, Orc, Goblin, Kobold } from "./entities/Monster.js";
 import { Hero } from "./entities/Hero.js";
+import { Game } from "./engine/Game.js";
 
 // --- 1. Successful Instantiation Tests ---
 const hero = new Hero("Arthur", 100, 15);
@@ -21,3 +22,15 @@ try {
 } catch (error) {
   console.log("Caught expected error:", error.message);
 }
+
+// --- 3. Game Engine & Investigation Tests ---
+const game = new Game(hero);
+
+// Test first investigation (should spawn a monster)
+game.investigate();
+
+// Test second investigation guard clause (should block since monster is alive)
+game.investigate();
+
+// --- 4. History Logging Test ---
+console.log("Game History Log:", game.history);
