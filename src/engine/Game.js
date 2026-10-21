@@ -1,5 +1,6 @@
 import { Monster, Orc, Goblin, Kobold } from "../entities/Monster.js";
 import { Hero } from "../entities/Hero.js";
+import { Combat } from "./Combat.js";
 
 /**
  * Class representing the main game engine and state manager.
@@ -41,23 +42,25 @@ export class Game {
     }
 
     /**
-     * Allows the hero to attack the active monster.
+     * Allows the hero to attack the active monster using the Combat engine.
      */
     attack() {
-        // Guard clause: Prevent attacking if the monster is dead
+        // Guard clause: Prevent attacking if there is no alive monster
         if (!this.monster || this.monster.health <= 0) {
             this.log("There is no active monster to attack!");
             return;
         }
 
-        // Deduct hero attack power from monster health
-        this.monster.health -= this.hero.attackPower;
-        this.log(`You attack ${this.monster.name} dealing ${this.hero.attackPower} damage! (${this.monster.name} health: ${this.monster.health}/${this.monster.maxHealth})`);
-        
-        // Check for monster defeat if health reaches 0
-        if (this.monster.health <= 0) {
-            this.monster.health = 0;
-            this.log(`You defeated the ${this.monster.name}!`);
+        // Delegate combat mechanics to the Combat class
+        const combat = new Combat(this.hero, this.monster);
+        const result = combat.executeTurn();
+
+        // Log formatted result using returned data
+        this.log(`You attack ${result.monsterName} dealing ${result.damage} damage! (${result.monsterName} health: ${result.monsterHealth}/${result.monsterMaxHealth})`);
+
+        // Check defeat flag returned from combat execution
+        if (result.isDefeated) {
+            this.log(`You defeated the ${result.monsterName}!`);
         }
     }
 }

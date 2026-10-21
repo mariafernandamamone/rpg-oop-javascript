@@ -35,7 +35,7 @@ game.investigate();
 // --- 4. History Logging Test ---
 console.log("Game History Log:", game.history);
 
-// --- 5. Combat Test ---
+// --- 5. Refactored Combat Engine Tests ---
 // Attack until defeated or blocked
 game.attack();
 game.attack();
