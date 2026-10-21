@@ -34,3 +34,13 @@ game.investigate();
 
 // --- 4. History Logging Test ---
 console.log("Game History Log:", game.history);
+
+// --- 5. Combat Test ---
+// Attack until defeated or blocked
+game.attack();
+game.attack();
+game.attack();
+game.attack(); // Once defeated, this next attack should hit the guard clause
+
+// Try to investigate again now that the monster is dead
+game.investigate();

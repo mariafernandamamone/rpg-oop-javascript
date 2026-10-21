@@ -39,4 +39,25 @@ export class Game {
         this.monster = new SelectedMonster();
         this.log(`You investigated the area and encountered a ${this.monster.name}!`);
     }
+
+    /**
+     * Allows the hero to attack the active monster.
+     */
+    attack() {
+        // Guard clause: Prevent attacking if the monster is dead
+        if (!this.monster || this.monster.health <= 0) {
+            this.log("There is no active monster to attack!");
+            return;
+        }
+
+        // Deduct hero attack power from monster health
+        this.monster.health -= this.hero.attackPower;
+        this.log(`You attack ${this.monster.name} dealing ${this.hero.attackPower} damage! (${this.monster.name} health: ${this.monster.health}/${this.monster.maxHealth})`);
+        
+        // Check for monster defeat if health reaches 0
+        if (this.monster.health <= 0) {
+            this.monster.health = 0;
+            this.log(`You defeated the ${this.monster.name}!`);
+        }
+    }
 }
