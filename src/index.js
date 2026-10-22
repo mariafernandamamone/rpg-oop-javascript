@@ -2,9 +2,10 @@ import { Creature } from "./entities/Creature.js";
 import { Monster, Orc, Goblin, Kobold } from "./entities/Monster.js";
 import { Hero } from "./entities/Hero.js";
 import { Game } from "./engine/Game.js";
+import { Potion } from "./items/potion.js";
 
 // --- 1. Successful Instantiation Tests ---
-const hero = new Hero("Arthur", 100, 15);
+const hero = new Hero("Arthur", 50, 10);
 const orc = new Orc();
 
 console.log("Hero created:", hero);
@@ -58,3 +59,19 @@ game.restart();
 game.investigate();
 game.attack();
 game.attack();
+
+// --- 7. Potion Item Tests ---
+// Instantiate a health potion with 20 heal points
+const healthPotion = new Potion("Health Potion", 20);
+
+// Reduce hero health to simulate combat damage
+hero.health = 30;
+console.log(`Hero health before potion: ${hero.health}/${hero.maxHealth}`);
+
+// Test use() method directly on hero entity
+const potionResult = healthPotion.use(hero);
+console.log(`Used ${potionResult.itemName}! Restored health: ${potionResult.targetHealth}/${potionResult.targetMaxHealth}`);
+
+// Test maximum health limit constraint (over-healing)
+healthPotion.use(hero);
+console.log(`Hero health after second potion (capped): ${hero.health}/${hero.maxHealth}`);
