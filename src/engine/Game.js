@@ -23,9 +23,15 @@ export class Game {
 
     /**
      * Investigates the area to discover a random monster.
-     * Only allowed if there is no active monster or the current one is dead.
+     * Only allowed if there is no active monster or the current one is dead and if hero isn't defeated yet.
      */
     investigate() {
+        // Guard clause: Prevent investigation if hero is defeated
+        if (this.hero.health <= 0) {
+            this.log("You cannot investigate because your hero has been defeated!");
+            return;
+        }
+
         // Guard clause: Prevent investigation if a monster is still alive
         if (this.monster && this.monster.health > 0) {
             this.log("Cannot investigate while a monster is alive!");
@@ -51,6 +57,12 @@ export class Game {
             return;
         }
 
+        // Guard clause: Prevent attack if hero is defeated
+        if (this.hero.health <= 0) {
+            this.log("You cannot attack because your hero has been defeated!");
+            return;
+        }
+
         // Delegate combat mechanics to the Combat class
         const combat = new Combat(this.hero, this.monster);
         const result = combat.executeTurn();
@@ -69,5 +81,17 @@ export class Game {
         if (result.isHeroDefeated) {
             this.log("Game Over");
         }
+    }
+
+    /**
+     * Resets the game state and restores the hero health.
+     */
+    restart() {
+        // Restore hero health to maximum and clear active monster
+        this.hero.health = this.hero.maxHealth;
+        this.monster = null;
+
+        // Log restart event
+        this.log(`${this.hero.name} has been restored. The journey begins anew!`);
     }
 }

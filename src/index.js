@@ -36,11 +36,25 @@ game.investigate();
 console.log("Game History Log:", game.history);
 
 // --- 5. Refactored Combat Engine Tests ---
-// Attack until defeated or blocked
+// Attack until monster is defeated
 game.attack();
 game.attack();
 game.attack();
-game.attack(); // Once defeated, this next attack should hit the guard clause
+game.attack(); // Blocked by guard clause (monster defeated)
 
-// Try to investigate again now that the monster is dead
+// Verify area investigation after battle
 game.investigate();
+
+// --- 6. Hero Defeat & Game Restart Tests ---
+// Force hero defeat to test guard clauses
+hero.health = 0;
+
+// Verify actions blocked when hero is defeated
+game.investigate();
+game.attack();
+
+// Reset game state and verify journey resumes
+game.restart();
+game.investigate();
+game.attack();
+game.attack();
