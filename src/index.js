@@ -2,7 +2,7 @@ import { Creature } from "./entities/Creature.js";
 import { Monster, Orc, Goblin, Kobold } from "./entities/Monster.js";
 import { Hero } from "./entities/Hero.js";
 import { Game } from "./engine/Game.js";
-import { Potion } from "./items/potion.js";
+import { Potion } from "./items/Potion.js";
 
 // --- 1. Successful Instantiation Tests ---
 const hero = new Hero("Arthur", 50, 10);
@@ -70,8 +70,33 @@ console.log(`Hero health before potion: ${hero.health}/${hero.maxHealth}`);
 
 // Test use() method directly on hero entity
 const potionResult = healthPotion.use(hero);
-console.log(`Used ${potionResult.itemName}! Restored health: ${potionResult.targetHealth}/${potionResult.targetMaxHealth}`);
+console.log(
+  `Used ${potionResult.itemName}! Restored health: ${potionResult.targetHealth}/${potionResult.targetMaxHealth}`,
+);
 
 // Test maximum health limit constraint (over-healing)
 healthPotion.use(hero);
-console.log(`Hero health after second potion (capped): ${hero.health}/${hero.maxHealth}`);
+console.log(
+  `Hero health after second potion (capped): ${hero.health}/${hero.maxHealth}`,
+);
+
+// --- 8. Hero Inventory & Potion Integration Tests ---
+// Instantiate new potions
+const superPotion = new Potion("Super Potion", 50);
+
+// Add items to hero inventory
+hero.addItem(healthPotion);
+hero.addItem(superPotion);
+
+// Simulate combat damage on hero
+hero.health = 20;
+console.log(`Hero health before potion: ${hero.health}/${hero.maxHealth}`);
+
+// Consume first available potion from inventory
+const usedPotionResult = hero.usePotion();
+if (usedPotionResult) {
+    console.log(`Used ${usedPotionResult.itemName}! Restored health: ${usedPotionResult.targetHealth}/${usedPotionResult.targetMaxHealth}`);
+}
+
+// Verify inventory size after consumption
+console.log(`Remaining items in inventory: ${hero.inventory.length}`);
