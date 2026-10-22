@@ -55,12 +55,19 @@ export class Game {
         const combat = new Combat(this.hero, this.monster);
         const result = combat.executeTurn();
 
-        // Log formatted result using returned data
+        // Log formatted hero attack result
         this.log(`You attack ${result.monsterName} dealing ${result.damage} damage! (${result.monsterName} health: ${result.monsterHealth}/${result.monsterMaxHealth})`);
 
-        // Check defeat flag returned from combat execution
+        // Check if monster was defeated or if counterattack occurs
         if (result.isDefeated) {
             this.log(`You defeated the ${result.monsterName}!`);
+        } else {
+            this.log(`${result.monsterName} counterattacked you dealing ${result.monsterDamage} damage! (${result.heroName} health: ${result.heroHealth}/${result.heroMaxHealth})`);
+        }
+
+        // Log Game Over message if hero health reaches 0
+        if (result.isHeroDefeated) {
+            this.log("Game Over");
         }
     }
 }
