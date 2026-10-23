@@ -60,43 +60,27 @@ game.investigate();
 game.attack();
 game.attack();
 
-// --- 7. Potion Item Tests ---
-// Instantiate a health potion with 20 heal points
-const healthPotion = new Potion("Health Potion", 20);
-
-// Reduce hero health to simulate combat damage
-hero.health = 30;
-console.log(`Hero health before potion: ${hero.health}/${hero.maxHealth}`);
-
-// Test use() method directly on hero entity
-const potionResult = healthPotion.use(hero);
-console.log(
-  `Used ${potionResult.itemName}! Restored health: ${potionResult.targetHealth}/${potionResult.targetMaxHealth}`,
-);
-
-// Test maximum health limit constraint (over-healing)
-healthPotion.use(hero);
-console.log(
-  `Hero health after second potion (capped): ${hero.health}/${hero.maxHealth}`,
-);
-
-// --- 8. Hero Inventory & Potion Integration Tests ---
+// --- 7. Hero Inventory & Potion Integration Tests ---
 // Instantiate new potions
+const healthPotion = new Potion("Health Potion", 20);
 const superPotion = new Potion("Super Potion", 50);
 
 // Add items to hero inventory
-hero.addItem(healthPotion);
-hero.addItem(superPotion);
+game.hero.addItem(healthPotion);
+game.hero.addItem(superPotion);
 
 // Simulate combat damage on hero
-hero.health = 20;
-console.log(`Hero health before potion: ${hero.health}/${hero.maxHealth}`);
+game.hero.health = 15;
+console.log(`Hero health before potion: ${game.hero.health}/${game.hero.maxHealth}`);
 
-// Consume first available potion from inventory
-const usedPotionResult = hero.usePotion();
-if (usedPotionResult) {
-    console.log(`Used ${usedPotionResult.itemName}! Restored health: ${usedPotionResult.targetHealth}/${usedPotionResult.targetMaxHealth}`);
-}
+// Consume first potion (restores 20 HP -> 35/50)
+game.usePotion();
 
-// Verify inventory size after consumption
-console.log(`Remaining items in inventory: ${hero.inventory.length}`);
+// Consume second potion (restores 50 HP -> capped at 50/50)
+game.usePotion();
+
+// Try using potion when inventory is empty (triggers guard clause log)
+game.usePotion();
+
+// Verify inventory size after consumption (should be 0)
+console.log(`Remaining items in inventory: ${game.hero.inventory.length}`);

@@ -94,4 +94,18 @@ export class Game {
         // Log restart event
         this.log(`${this.hero.name} has been restored. The journey begins anew!`);
     }
+
+    /**
+     * Executes potion usage for the hero and logs the outcome.
+     */
+    usePotion() {
+        const result = this.hero.usePotion();
+        
+        if (!result) {
+            this.log(`${this.hero.name} has no potions left in inventory!`);
+            return;
+        }
+
+        this.log(`${this.hero.name} used ${result.itemName} and restored health to ${result.targetHealth}/${result.targetMaxHealth}!`);
+    }
 }
