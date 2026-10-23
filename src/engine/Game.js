@@ -1,6 +1,7 @@
-import { Monster, Orc, Goblin, Kobold } from "../entities/Monster.js";
-import { Hero } from "../entities/Hero.js";
+import { Orc, Goblin, Kobold } from "../entities/Monster.js";
 import { Combat } from "./Combat.js";
+import { Potion } from "../items/Potion.js";
+import { Weapon } from "../items/Weapon.js";
 
 /**
  * Class representing the main game engine and state manager.
@@ -96,16 +97,22 @@ export class Game {
     }
 
     /**
-     * Executes potion usage for the hero and logs the outcome.
+     * Executes item usage for the hero and logs the outcome.
+     * @param {Item} item - The item to be used.
      */
-    usePotion() {
-        const result = this.hero.usePotion();
+    useItem(item) {
+        const result = this.hero.useItem(item);
         
         if (!result) {
-            this.log(`${this.hero.name} has no potions left in inventory!`);
+            this.log(`${this.hero.name} has no ${item.name} in inventory!`);
             return;
         }
 
-        this.log(`${this.hero.name} used ${result.itemName} and restored health to ${result.targetHealth}/${result.targetMaxHealth}!`);
+        // Check item type using instanceof
+        if (item instanceof Potion) {
+            this.log(`${this.hero.name} used ${result.itemName} and restored health to ${result.targetHealth}/${result.targetMaxHealth}!`);
+        } else if (item instanceof Weapon) {
+            this.log(`${this.hero.name} equipped ${result.itemName}! Attack power increased to ${result.targetAttackPower}.`);
+        }
     }
 }

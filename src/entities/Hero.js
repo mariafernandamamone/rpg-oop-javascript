@@ -1,5 +1,5 @@
 import { Creature } from "./Creature.js";
-import { Potion } from "../items/Potion.js";
+import { Item } from "../items/Item.js";
 
 /**
  * Class representing the Hero entity in the game.
@@ -28,20 +28,21 @@ export class Hero extends Creature {
   }
 
   /**
-   * Uses the first available potion from the inventory on the hero.
-   * @returns {Object|null} Summary of the potion effect or null if no potion is available.
+   * Uses a specific item from the inventory on the hero.
+   * @param {Item} item - The item instance to use.
+   * @returns {Object|null} Summary of the item effect or null if item is not found in inventory.
    */
-  usePotion() {
-    // Find first potion in inventory
-    const index = this.inventory.findIndex((item) => item instanceof Potion);
+  useItem(item) {
+    // Find index of the specified item in inventory
+    const index = this.inventory.indexOf(item);
 
-    // Guard clause: Return null if no potion found
+    // Guard clause: Return null if item is not found
     if (index === -1) {
-      return null;
+        return null;
     }
 
-    // Remove potion from inventory and apply effect to hero
-    const [potion] = this.inventory.splice(index, 1);
-    return potion.use(this);
+    // Remove item from inventory and apply its effect on the hero
+    const [usedItem] = this.inventory.splice(index, 1);
+    return usedItem.use(this);
   }
 }

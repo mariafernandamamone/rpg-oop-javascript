@@ -1,37 +1,37 @@
+import { Item } from "./Item.js";
+
 /**
- * Represents a health potion that restores target entity health.
+ * Represents a health potion item that restores health to a target entity.
+ * @extends Item
  */
-export class Potion {
+export class Potion extends Item {
     /**
-     * Creates a new Potion instance.
-     * @param {string} name - The item name.
+     * Creates an instance of Potion.
+     * @param {string} name - The potion name.
      * @param {number} healAmount - The health points restored upon use.
      */
     constructor(name, healAmount) {
-        this.name = name;
+        super(name);
         this.healAmount = healAmount;
     }
 
     /**
-     * Uses the potion on a target entity.
+     * Uses the potion on a target entity to restore health up to maxHealth.
      * @param {Object} target - The entity receiving the heal.
      * @returns {Object} Summary of the healing effect.
      */
     use(target) {
-        // Increase target health by potion heal amount
         target.health += this.healAmount;
 
-        // Cap health at maximum allowed limit
         if (target.health > target.maxHealth) {
             target.health = target.maxHealth;
         }
 
-        // Return summary of the healing effect
         return {
-            itemName: this.name, 
-            healAmount: this.healAmount, 
-            targetHealth: target.health, 
+            itemName: this.name,
+            healAmount: this.healAmount,
+            targetHealth: target.health,
             targetMaxHealth: target.maxHealth
-        }
-    }    
+        };
+    }
 }

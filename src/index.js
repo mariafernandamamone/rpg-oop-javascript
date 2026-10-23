@@ -2,7 +2,9 @@ import { Creature } from "./entities/Creature.js";
 import { Monster, Orc, Goblin, Kobold } from "./entities/Monster.js";
 import { Hero } from "./entities/Hero.js";
 import { Game } from "./engine/Game.js";
+import { Item } from "./items/Item.js";
 import { Potion } from "./items/Potion.js";
+import { Weapon } from "./items/Weapon.js";
 
 // --- 1. Successful Instantiation Tests ---
 const hero = new Hero("Arthur", 50, 10);
@@ -60,27 +62,29 @@ game.investigate();
 game.attack();
 game.attack();
 
-// --- 7. Hero Inventory & Potion Integration Tests ---
-// Instantiate new potions
+// --- 7. Hero Inventory, Potion & Weapon Integration Tests ---
+// Instantiate items
 const healthPotion = new Potion("Health Potion", 20);
-const superPotion = new Potion("Super Potion", 50);
+const ironSword = new Weapon("Iron Sword", 5);
 
 // Add items to hero inventory
 game.hero.addItem(healthPotion);
-game.hero.addItem(superPotion);
+game.hero.addItem(ironSword);
 
 // Simulate combat damage on hero
 game.hero.health = 15;
-console.log(`Hero health before potion: ${game.hero.health}/${game.hero.maxHealth}`);
+console.log(`Hero state before items - Health: ${game.hero.health}/${game.hero.maxHealth}, Attack: ${game.hero.attackPower}`);
 
-// Consume first potion (restores 20 HP -> 35/50)
-game.usePotion();
+// Use potion via game engine (restores health)
+game.useItem(healthPotion);
 
-// Consume second potion (restores 50 HP -> capped at 50/50)
-game.usePotion();
+// Equip weapon via game engine (increases attack power)
+game.useItem(ironSword);
 
-// Try using potion when inventory is empty (triggers guard clause log)
-game.usePotion();
+// Try using an item that is not in inventory (triggers guard clause log)
+const magicWand = new Weapon("Magic Wand", 10);
+game.useItem(magicWand);
 
-// Verify inventory size after consumption (should be 0)
+// Verify final state
 console.log(`Remaining items in inventory: ${game.hero.inventory.length}`);
+console.log(`Hero state after items - Health: ${game.hero.health}/${game.hero.maxHealth}, Attack: ${game.hero.attackPower}`);
