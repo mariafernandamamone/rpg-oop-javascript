@@ -1,5 +1,5 @@
 import { Creature } from "./Creature.js";
-import { Item } from "../items/Item.js";
+import { Inventory } from "../world/Inventory.js";
 
 /**
  * Class representing the Hero entity in the game.
@@ -14,35 +14,25 @@ export class Hero extends Creature {
    */
   constructor(name, maxHealth, attackPower) {
     super(name, maxHealth, attackPower);
-    // Initialize empty inventory array
-    this.inventory = [];
+    // Initialize Inventory instance
+    this.inventory = new Inventory();
   }
 
   /**
-   * Adds an item to the hero inventory.
-   * @param {Object} item - The item instance to add.
+   * Adds an item to the hero's inventory.
+   * @param {Object} item - The item to add.
    */
   addItem(item) {
-    // Push item into inventory
-    this.inventory.push(item);
+    this.inventory.addItem(item);
   }
 
   /**
-   * Uses a specific item from the inventory on the hero.
-   * @param {Item} item - The item instance to use.
-   * @returns {Object|null} Summary of the item effect or null if item is not found in inventory.
+   * Uses an item from inventory on a target entity (defaults to self).
+   * @param {Object} item - The item instance to use.
+   * @param {Object} [target=this] - The target entity receiving the effect.
+   * @returns {Object|null} Summary of the effect or null if item is not found.
    */
-  useItem(item) {
-    // Find index of the specified item in inventory
-    const index = this.inventory.indexOf(item);
-
-    // Guard clause: Return null if item is not found
-    if (index === -1) {
-        return null;
-    }
-
-    // Remove item from inventory and apply its effect on the hero
-    const [usedItem] = this.inventory.splice(index, 1);
-    return usedItem.use(this);
+  useItem(item, target = this) {
+    return this.inventory.useItem(item, target);
   }
 }
