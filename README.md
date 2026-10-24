@@ -38,23 +38,28 @@ src/
 
 ---
 
-## 💻 Installation & Usage
+## 🛠️ Requisitos e Instalación
 
-### 1. Clone the repository:
+Este proyecto fue desarrollado utilizando:
+* **Node.js:** `>=v22.14.0` (ver especificación exacta en el archivo `.nvmrc`)
 
+### Cómo ejecutar el proyecto
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/mariafernandamamone/rpg-battle-engine.git
 ```
-git clone [https://github.com/mariafernandamamone/rpg-battle-engine.git](https://github.com/mariafernandamamone/rpg-battle-engine.git)
-```
 
-### 2. Navigate into the directory:
+2. Navigate into the directory:
 
-```
+```bash
 cd rpg-battle-engine
 ```
 
-### 3. Run the test suite runner:
+3. Run the test suite runner:
 
-```
+```bash
 npm start
 ```
 
@@ -62,4 +67,4 @@ npm start
 
 ## 📄 License
 
-### This project is open-source and available under the MIT License.
+This project is open-source and available under the MIT License.
