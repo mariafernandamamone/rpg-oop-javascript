@@ -30,6 +30,7 @@ export class Combat {
         if (this.monster.health > 0 && this.hero.health > 0) {
             monsterDamage = this.monster.attackPower;
             this.hero.health -= monsterDamage;
+            this.hero.isRested = false;
 
             // Enforce minimum health limit of 0 for hero
             if (this.hero.health <= 0) {

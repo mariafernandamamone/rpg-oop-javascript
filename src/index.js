@@ -190,6 +190,27 @@ console.log("\n--- Moving to Quiet Path & Investigating Empty Area ---");
 game.move(quietPath);
 game.investigate();
 
+// --- 9. Rest Mechanic Tests ---
+console.log("\n==================================================");
+console.log("9. TESTING REST MECHANIC");
+console.log("==================================================");
+
+// 1. Try resting in an uninvestigated area (Blocked)
+const quietMeadow = new Area("Quiet Meadow", null, null);
+game.move(quietMeadow);
+console.log("--- Attempting to rest in uninvestigated area ---");
+game.rest();
+
+// 2. Investigate empty area and rest successfully
+console.log("\n--- Investigating empty area & resting ---");
+game.hero.health = 20; // Simulate hero taking damage
+game.investigate();
+game.rest();
+
+// 3. Try resting again immediately (Blocked: Already rested)
+console.log("\n--- Attempting to rest twice in a row ---");
+game.rest();
+
 console.log("\n==================================================");
 console.log("            ALL TESTS COMPLETED SUCCESSFULLY       ");
 console.log("==================================================");

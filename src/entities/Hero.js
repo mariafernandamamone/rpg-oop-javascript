@@ -16,6 +16,8 @@ export class Hero extends Creature {
     super(name, maxHealth, attackPower);
     // Initialize Inventory instance
     this.inventory = new Inventory();
+    // Rest state flag (true if hero rested, turns false when taking damage)
+    this.isRested = false;
   }
 
   /**
@@ -34,5 +36,22 @@ export class Hero extends Creature {
    */
   useItem(item, target = this) {
     return this.inventory.useItem(item, target);
+  }
+
+  /**
+   * Restores health if the hero is not currently rested.
+   * @param {number} [healAmount=15] - The amount of health to recover.
+   * @returns {boolean} True if rest was successful, false if already rested.
+   */
+  rest(healAmount = 15) {
+    // Guard clause: Cannot rest if already rested
+    if (this.isRested) {
+      return false;
+    }
+
+    // Apply heal without exceeding maxHealth
+    this.health = Math.min(this.health + healAmount, this.maxHealth);
+    this.isRested = true;
+    return true;
   }
 }
