@@ -2,6 +2,7 @@ import { Orc, Goblin, Kobold } from "../entities/Monster.js";
 import { Combat } from "./Combat.js";
 import { Potion } from "../items/Potion.js";
 import { Weapon } from "../items/Weapon.js";
+import { Area } from "../world/Area.js";
 
 /**
  * Class representing the main game engine and state manager.
@@ -9,8 +10,8 @@ import { Weapon } from "../items/Weapon.js";
 export class Game {
     constructor(hero) {
         this.hero = hero;
-        this.monster = null;
-        this.history = []
+        this.currentArea = new Area();
+        this.history = [];
     }
 
     /**
@@ -23,8 +24,8 @@ export class Game {
     }
 
     /**
-     * Investigates the area to discover a random monster.
-     * Only allowed if there is no active monster or the current one is dead and if hero isn't defeated yet.
+     * Investigates the current area to discover monsters, items, or empty spaces.
+     * Prevents exploration if the hero is defeated or if an active monster is alive.
      */
     investigate() {
         // Guard clause: Prevent investigation if hero is defeated
@@ -39,13 +40,53 @@ export class Game {
             return;
         }
 
-        // Select and instantiate a random monster class
-        const monsters = [Orc, Goblin, Kobold];
-        const randomIndex = Math.floor(Math.random() * monsters.length);
-        const SelectedMonster = monsters[randomIndex];
+        // Delegate investigation to the current area
+        const result = this.currentArea.investigate();
 
-        this.monster = new SelectedMonster();
-        this.log(`You investigated the area and encountered a ${this.monster.name}!`);
+        // Handle area outcome based on discovery type
+        if (result.type === "already_investigated") {
+            this.log(`${this.currentArea.name} has already been investigated.`);
+            return;
+        }
+
+        if (result.type === "monster") {
+            this.monster = result.entity;
+            this.log(`An ambush! You encountered a ${this.monster.name} in ${this.currentArea.name}!`);
+            return;
+        }
+
+        if (result.type === "item") {
+            this.hero.addItem(result.entity);
+            this.log(`${this.hero.name} found a ${result.entity.name} in ${this.currentArea.name} and added it to inventory.`);
+            return;
+        }
+
+        if (result.type === "empty") {
+            this.log(`${this.currentArea.name} was investigated. Nothing was found...`);
+        }
+    }
+
+    /**
+     * Changes the current area to a new one if conditions allow.
+     * @param {Area} newArea - The new area instance to move to.
+     */
+    move(newArea) {
+        // Guard clause: Prevent movement if hero is defeated
+        if (this.hero.health <= 0) {
+            this.log(`${this.hero.name} is defeated and cannot change area.`);
+            return;
+        }
+
+        // Guard clause: Prevent movement if engaged in active combat
+        if (this.monster && this.monster.health > 0) {
+            this.log(`The monster ${this.monster.name} is still alive, cannot change area!`);
+            return;
+        }
+
+        // Update active area and reset active monster context
+        this.currentArea = newArea;
+        this.monster = null;
+        this.log(`${this.hero.name} moved to a new area: ${newArea.name}.`);
     }
 
     /**

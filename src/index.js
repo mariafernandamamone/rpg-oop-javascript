@@ -5,6 +5,7 @@ import { Game } from "./engine/Game.js";
 import { Item } from "./items/Item.js";
 import { Potion } from "./items/Potion.js";
 import { Weapon } from "./items/Weapon.js";
+import { Area } from "./world/Area.js";
 
 console.log("==================================================");
 console.log("          RPG ENGINE - TEST SUITE RUNNER         ");
@@ -149,6 +150,45 @@ game.useItem(woodenShield);
 
 console.log("\n--- Final Inventory State ---");
 console.log(game.hero.inventory.getItems());
+
+// --- 8. World Area & Exploration Tests ---
+console.log("\n==================================================");
+console.log("8. TESTING WORLD AREAS & MOVEMENT");
+console.log("==================================================");
+
+// 1. Instantiate Areas with different content
+const darkForest = new Area("Dark Forest", new Orc(), null);
+const crystalCave = new Area("Crystal Cave", null, new Potion("Health Potion", 20));
+const quietPath = new Area("Quiet Path", null, null);
+
+// 2. Set initial area and investigate Dark Forest (Spawns Orc)
+console.log("--- Moving to Dark Forest & Investigating ---");
+game.move(darkForest);
+game.investigate();
+
+// 3. Try to move while monster is alive (Triggers guard clause)
+console.log("\n--- Testing Move Guard Clause (Blocked: Monster Alive) ---");
+game.move(crystalCave);
+
+// 4. Defeat Orc and move to Crystal Cave
+console.log("\n--- Defeating Monster & Moving to Crystal Cave ---");
+game.attack();
+game.attack();
+game.attack();
+game.move(crystalCave);
+
+// 5. Investigate Crystal Cave (Finds Potion)
+console.log("\n--- Investigating Crystal Cave ---");
+game.investigate();
+
+// 6. Try investigating Crystal Cave again (Triggers already_investigated clause)
+console.log("\n--- Investigating Crystal Cave Again (Guard Clause) ---");
+game.investigate();
+
+// 7. Move to Quiet Path and investigate (Empty Area)
+console.log("\n--- Moving to Quiet Path & Investigating Empty Area ---");
+game.move(quietPath);
+game.investigate();
 
 console.log("\n==================================================");
 console.log("            ALL TESTS COMPLETED SUCCESSFULLY       ");
